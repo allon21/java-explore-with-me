@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.StatsDto;
 import ru.practicum.StatsHitDto;
+import ru.practicum.exception.StatsServiceException;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mapper.StatsMapper;
 import ru.practicum.model.StatsHit;
 import ru.practicum.repository.StatsRepository;
@@ -32,7 +34,7 @@ public class StatsServiceImpl implements StatsService {
             return result;
         } catch (Exception e) {
             log.error("Ошибка при сохранении hit: {}", e.getMessage(), e);
-            throw new RuntimeException("Ошибка при сохранении hit");
+            throw new StatsServiceException("Не удалось сохранить hit в базу данных", e);
         }
     }
 
@@ -51,10 +53,10 @@ public class StatsServiceImpl implements StatsService {
 
         } catch (DateTimeParseException e) {
             log.error("Ошибка при парсинге даты: {}", e.getMessage(), e);
-            throw new DateTimeParseException("Неверный формат даты. Ожидается формат: yyyy-MM-dd HH:mm:ss", e.getParsedString(), e.getErrorIndex());
+            throw new ValidationException("Неверный формат даты. Ожидается формат: yyyy-MM-dd HH:mm:ss");
         } catch (Exception e) {
             log.error("Ошибка при получении статистики: {}", e.getMessage(), e);
-            throw new RuntimeException("Ошибка при получении статистики");
+            throw new StatsServiceException("Ошибка при выполнении операции получения статистики", e);
         }
     }
 }

@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "stats")
-@EqualsAndHashCode(of = {"id"})
 public class StatsHit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

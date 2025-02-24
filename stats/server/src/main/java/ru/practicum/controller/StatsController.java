@@ -1,5 +1,6 @@
 package ru.practicum.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,7 +20,7 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    public StatsHitDto saveHit(@RequestBody StatsHitDto statsHitDto) {
+    public StatsHitDto saveHit(@Valid @RequestBody StatsHitDto statsHitDto) {
         log.info("Пришел запрос POST/hit с телом {}", statsHitDto);
         return statsService.saveHit(statsHitDto);
     }
