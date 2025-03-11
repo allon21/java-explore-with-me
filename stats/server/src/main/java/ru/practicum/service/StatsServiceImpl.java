@@ -45,6 +45,10 @@ public class StatsServiceImpl implements StatsService {
             LocalDateTime startDate = LocalDateTime.parse(start, FORMATTER);
             LocalDateTime endDate = LocalDateTime.parse(end, FORMATTER);
 
+            if (startDate.isAfter(endDate)) {
+                throw new ValidationException("Дата начала должна быть раньше даты окончания");
+            }
+
             if (unique) {
                 return repository.getUniqueHits(startDate, endDate, uris);
             } else {
