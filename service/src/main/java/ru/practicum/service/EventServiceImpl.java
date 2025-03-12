@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
-    public static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
@@ -276,8 +276,8 @@ public class EventServiceImpl implements EventService {
             log.debug("Категории не указаны. Используются все доступные категории: {}", categories);
         }
 
-        LocalDateTime start = rangeStart != null ? LocalDateTime.parse(rangeStart, DTF) : LocalDateTime.now();
-        LocalDateTime end = rangeEnd != null ? LocalDateTime.parse(rangeEnd, DTF) : LocalDateTime.of(2100, 1, 1, 0, 0, 0);
+        LocalDateTime start = rangeStart != null ? LocalDateTime.parse(rangeStart, FORMATTER) : LocalDateTime.now();
+        LocalDateTime end = rangeEnd != null ? LocalDateTime.parse(rangeEnd, FORMATTER) : LocalDateTime.of(2100, 1, 1, 0, 0, 0);
 
         if (end.isBefore(start)) {
             throw new ValidationException("Дата окончания не может быть раньше даты начала.");
@@ -316,8 +316,8 @@ public class EventServiceImpl implements EventService {
                                                      int from,
                                                      int size) {
         Pageable pageable = PageRequest.of(from / size, size);
-        LocalDateTime start = rangeStart != null ? LocalDateTime.parse(rangeStart, DTF) : LocalDateTime.of(1970, 1, 1, 0, 0);
-        LocalDateTime end = rangeEnd != null ? LocalDateTime.parse(rangeEnd, DTF) : LocalDateTime.of(2100, 1, 1, 0, 0);
+        LocalDateTime start = rangeStart != null ? LocalDateTime.parse(rangeStart, FORMATTER) : LocalDateTime.of(1970, 1, 1, 0, 0);
+        LocalDateTime end = rangeEnd != null ? LocalDateTime.parse(rangeEnd, FORMATTER) : LocalDateTime.of(2100, 1, 1, 0, 0);
 
         if (states == null || states.isEmpty()) {
             states = List.of(EventState.PENDING, EventState.CANCELED, EventState.PUBLISHED);
