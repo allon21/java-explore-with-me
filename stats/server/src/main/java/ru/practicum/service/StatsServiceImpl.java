@@ -44,6 +44,11 @@ public class StatsServiceImpl implements StatsService {
         try {
             LocalDateTime startDate = LocalDateTime.parse(start, FORMATTER);
             LocalDateTime endDate = LocalDateTime.parse(end, FORMATTER);
+            log.info("Проверка диапазона дат: startDate={}, endDate={}", startDate, endDate);
+            if (endDate.isBefore(startDate)) {
+                log.error("Ошибка валидации: Дата начала {} позже даты окончания {}", startDate, endDate);
+                throw new ValidationException("Дата начала должна быть раньше даты окончания");
+            }
 
             if (unique) {
                 return repository.getUniqueHits(startDate, endDate, uris);
@@ -54,6 +59,9 @@ public class StatsServiceImpl implements StatsService {
         } catch (DateTimeParseException e) {
             log.error("Ошибка при парсинге даты: {}", e.getMessage(), e);
             throw new ValidationException("Неверный формат даты. Ожидается формат: yyyy-MM-dd HH:mm:ss");
+        } catch (ValidationException e) {
+            log.error("Ошибка при проверки даты: {}", e.getMessage(), e);
+            throw new ValidationException("Неверный запрос с неверными датами");
         } catch (Exception e) {
             log.error("Ошибка при получении статистики: {}", e.getMessage(), e);
             throw new StatsServiceException("Ошибка при выполнении операции получения статистики", e);
