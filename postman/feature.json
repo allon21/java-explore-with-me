@@ -21,7 +21,7 @@
               "pm.test(\"Пользователь имеет Id\", () => {",
               "  pm.expect(firstUser.id).to.be.a('number');",
               "});",
-              "pm.collectionVariables.set(\"firstUserId\", firstUser.id);"
+              "pm.collectionVariables.set(\"userId_1\", firstUser.id);"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -68,10 +68,10 @@
               "});",
               "",
               "const secondUser = pm.response.json();",
-              "pm.test(\"Пользователь имеет Id\", () => {",
+              "pm.test(\"Пользователь имеет ID\", () => {",
               "  pm.expect(secondUser.id).to.be.a('number');",
               "});",
-              "pm.collectionVariables.set(\"secondUserId\", secondUser.id);"
+              "pm.collectionVariables.set(\"userId_2\", secondUser.id);"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -165,7 +165,7 @@
               "});",
               "",
               "const event = pm.response.json();",
-              "pm.test(\"Событие имеет Id\", () => {",
+              "pm.test(\"Событие имеет ID\", () => {",
               "  pm.expect(event.id).to.be.a('number');",
               "});",
               "pm.collectionVariables.set(\"eventId\", event.id);"
@@ -219,7 +219,6 @@
           "listen": "test",
           "script": {
             "exec": [
-              "// Ожидаем 404 (событие не найдено) или 409 (событие не опубликовано)",
               "pm.test(\"Ожидаем 404 или 409\", () => {",
               "  pm.expect(pm.response.code).to.be.oneOf([404, 409]);",
               "});"
@@ -264,7 +263,6 @@
           "listen": "test",
           "script": {
             "exec": [
-              "// Ожидаем 200 (статус события успешно изменен) или 409 (событие уже имеет статус PUBLISHED)",
               "pm.test(\"Ожидаем 200 или 409\", () => {",
               "  pm.expect(pm.response.code).to.be.oneOf([200, 409]);",
               "});"
@@ -307,16 +305,15 @@
           "listen": "test",
           "script": {
             "exec": [
-              "// Ожидаем 201 (комментарий успешно добавлен), 400 (данные тела запроса не прошли валидацию) или 404 (событие не найдено)",
               "pm.test(\"Ожидаем 201, 400 или 404\", () => {",
               "  pm.expect(pm.response.code).to.be.oneOf([201, 400, 404]);",
               "});",
               "",
               "const firstComment = pm.response.json();",
-              "pm.test(\"Комментарий имеет ID\", () => {",
+              "pm.test(\"Комментарий имеет Id\", () => {",
               "  pm.expect(firstComment.id).to.be.a('number');",
               "});",
-              "pm.collectionVariables.set(\"firstCommentId\", firstComment.id);"
+              "pm.collectionVariables.set(\"commentId_1\", firstComment.id);"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -358,16 +355,15 @@
           "listen": "test",
           "script": {
             "exec": [
-              "// Ожидаем 201 (комментарий успешно добавлен), 400 (данные тела запроса не прошли валидацию) или 404 (событие не найдено)",
               "pm.test(\"Ожидаем 201, 400 или 404\", () => {",
               "  pm.expect(pm.response.code).to.be.oneOf([201, 400, 404]);",
               "});",
               "",
               "const secondComment = pm.response.json();",
-              "pm.test(\"Комментарий имеет ID\", () => {",
+              "pm.test(\"Комментарий имеет Id\", () => {",
               "  pm.expect(secondComment.id).to.be.a('number');",
               "});",
-              "pm.collectionVariables.set(\"secondCommentId\", secondComment.id);"
+              "pm.collectionVariables.set(\"commentId_2\", secondComment.id);"
             ],
             "type": "text/javascript",
             "packages": {}
@@ -409,7 +405,6 @@
           "listen": "test",
           "script": {
             "exec": [
-              "// Ожидаем 200 (комментарий успешно обновлен), 400 (данные тела запроса не прошли валидацию), 404 (комментарий не найден), 409 (с момента создания комментария прошло более часа)",
               "pm.test(\"Ожидаем 200, 400, 404 или 409\", () => {",
               "  pm.expect(pm.response.code).to.be.oneOf([200, 400, 404, 409]);",
               "});"
@@ -455,7 +450,6 @@
           "listen": "test",
           "script": {
             "exec": [
-              "// 404 (комментарий не найден)",
               "pm.test(\"Ожидаем 409\", () => {",
               "  pm.expect(pm.response.code).to.be.oneOf([409]);",
               "});"
@@ -786,22 +780,6 @@
     },
     {
       "key": "commentId_2",
-      "value": ""
-    },
-    {
-      "key": "firstUserId",
-      "value": ""
-    },
-    {
-      "key": "secondUserId",
-      "value": ""
-    },
-    {
-      "key": "firstCommentId",
-      "value": ""
-    },
-    {
-      "key": "secondCommentId",
       "value": ""
     }
   ]
