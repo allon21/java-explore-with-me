@@ -1,7 +1,8 @@
 package ru.practicum.dto.comment;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.*;
-import ru.practicum.dto.user.UserShortDto;
 import ru.practicum.enums.CommentState;
 
 @Getter
@@ -9,12 +10,9 @@ import ru.practicum.enums.CommentState;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentDto {
-    private Long id;
-
-    private UserShortDto author;
-
+public class AdminCommentUpdateDto {
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String message;
-
     private CommentState state;
 }

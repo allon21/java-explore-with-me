@@ -3,6 +3,7 @@ package ru.practicum.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import ru.practicum.enums.CommentState;
 
 @Getter
 @Setter
@@ -23,4 +24,8 @@ public class Comment {
 
     @Column
     private String message;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CommentState state;
 }

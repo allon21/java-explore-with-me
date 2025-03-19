@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS comments (
     author_id BIGINT,
     event_id BIGINT,
     message VARCHAR(255),
+    state VARCHAR(20) NOT NULL DEFAULT 'PENDING',
     FOREIGN KEY (event_id) REFERENCES events (id),
     FOREIGN KEY (author_id) REFERENCES users (id)
 );

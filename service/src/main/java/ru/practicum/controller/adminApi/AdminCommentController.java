@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.dto.comment.AdminCommentUpdateDto;
 import ru.practicum.dto.comment.CommentDto;
-import ru.practicum.dto.comment.NewCommentDto;
 import ru.practicum.service.CommentService;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class AdminCommentController {
     @PatchMapping("/{comId}")
     public ResponseEntity<CommentDto> updateComment(@PathVariable Long eventId,
                                                     @PathVariable Long comId,
-                                                    @RequestBody @Valid NewCommentDto newCommentDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(commentService.adminUpdate(eventId, comId, newCommentDto));
+                                                    @RequestBody @Valid AdminCommentUpdateDto adminCommentUpdateDto) {
+        return ResponseEntity.status(HttpStatus.OK).body(commentService.adminUpdate(eventId, comId, adminCommentUpdateDto));
     }
 }

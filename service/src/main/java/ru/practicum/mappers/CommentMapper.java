@@ -16,5 +16,6 @@ public interface CommentMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "event", ignore = true)
     @Mapping(target = "author", ignore = true)
+    @Mapping(target = "state", ignore = true)
     Comment getComment(NewCommentDto newCommentDto);
 }

@@ -6,11 +6,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import ru.practicum.dto.comment.AdminCommentUpdateDto;
 import ru.practicum.dto.comment.CommentDto;
 import ru.practicum.dto.comment.NewCommentDto;
+import ru.practicum.enums.CommentState;
 import ru.practicum.enums.EventState;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
+import ru.practicum.exception.ValidationException;
 import ru.practicum.mappers.CommentMapper;
 import ru.practicum.model.Comment;
 import ru.practicum.model.Event;
@@ -42,19 +45,33 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public CommentDto adminUpdate(Long eventId, Long comId, NewCommentDto newCommentDto) {
+    public CommentDto adminUpdate(Long eventId, Long comId, AdminCommentUpdateDto adminCommentUpdateDto) {
         Comment comment = commentRepository.findById(comId)
                 .orElseThrow(() -> new NotFoundException("Comment не найден"));
         if (!((comment.getEvent().getId()) == eventId)) {
             throw new ConflictException("Comment не относиться к этому событию");
         }
-        comment.setMessage(newCommentDto.getMessage());
+        if (adminCommentUpdateDto.getMessage() != null) {
+            comment.setMessage(adminCommentUpdateDto.getMessage());
+        }
+        if (adminCommentUpdateDto.getState() != null) {
+            comment.setState(adminCommentUpdateDto.getState());
+        }
         return commentMapper.getCommentDto(commentRepository.save(comment));
     }
 
     @Override
     public List<CommentDto> getAllComments(long eventId, int from, int size) {
-        Pageable pageable = PageRequest.of(from > 0 ? from / size : 0, size, Sort.by(Sort.Direction.ASC, "id"));
+        eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event не найден"));
+        if (from < 0) {
+            throw new ValidationException("from не может быть отрицательным");
+        }
+        if (size <= 0) {
+            throw new ValidationException("size должен быть больше 0");
+        }
+        int page = from / size;
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "id"));
         return commentRepository.findAllByEventId(pageable, eventId)
                 .stream()
                 .map(commentMapper::getCommentDto)
@@ -75,6 +92,7 @@ public class CommentServiceImpl implements CommentService {
         Comment comment = commentMapper.getComment(newCommentDto);
         comment.setEvent(event);
         comment.setAuthor(author);
+        comment.setState(CommentState.PENDING);
         comment = commentRepository.save(comment);
 
         return commentMapper.getCommentDto(comment);
@@ -92,7 +110,9 @@ public class CommentServiceImpl implements CommentService {
             throw new ConflictException("User не является автором комментария");
         }
 
-        comment.setMessage(newCommentDto.getMessage());
+        if (newCommentDto.getMessage() != null) {
+            comment.setMessage(newCommentDto.getMessage());
+        }
         return commentMapper.getCommentDto(commentRepository.save(comment));
     }
 
